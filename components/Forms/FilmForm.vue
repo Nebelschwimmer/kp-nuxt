@@ -1,115 +1,117 @@
 <template>
 	<v-card>
-		<v-form
-			ref="formRef"
-			@submit.prevent>
-			<v-text-field
-				v-model="filmForm.name"
-				name="name"
-				:rules="nameRules"
-				:label="$t('forms.film.name')"
-				prepend-inner-icon="mdi-movie-play" />
-			<v-text-field
-				v-model="filmForm.slogan"
-				name="slogan"
-				:label="$t('forms.film.slogan')"
-				prepend-inner-icon="mdi-format-quote-close" />
-			<v-combobox
-				v-model.number="filmForm.releaseYear"
-				name="releaseYear"
-				:rules="releaseYearRules"
-				prepend-inner-icon="mdi-calendar"
-				:label="$t('forms.film.release_year')"
-				:items="yearsOfReleaseItems" />
-			<v-select
-				v-model="filmForm.genreIds"
-				name="genreIds"
-				multiple
-				:items="genres"
-				:rules="multipleSelectRules"
-				:label="$t('forms.film.genres')"
-				item-value="value"
-				item-title="name"
-				prepend-inner-icon="mdi-filmstrip" />
-			<v-select
-				v-model.number="filmForm.age"
-				name="age"
-				:rules="ageRules"
-				prepend-inner-icon="mdi-cake-variant"
-				:label="$t('forms.film.age')"
-				:items="ageItems" />
-			<v-text-field
-				v-model="filmForm.duration"
-				:label="$t('forms.film.duration')"
-				type="time"
-				name="duration"
-				prepend-inner-icon="mdi-timer"
-				:rules="durationRules" />
-			<v-select
-				v-model="filmForm.actorIds"
-				:loading="loading"
-				name="actorIds"
-				multiple
-				:items="actors"
-				item-value="id"
-				item-title="name"
-				:rules="multipleSelectRules"
-				:label="$t('forms.film.actors')"
-				prepend-inner-icon="mdi-account" />
-			<v-select
-				v-model.number="filmForm.directorId"
-				name="directorId"
-				:loading="loading"
-				item-value="id"
-				item-title="name"
-				:items="directors"
-				:rules="selectRules"
-				:label="$t('forms.film.director')"
-				prepend-inner-icon="mdi-account" />
-			<v-select
-				v-model.number="filmForm.producerId"
-				name="producerId"
-				item-value="id"
-				:loading="loading"
-				item-title="name"
-				:items="directors"
-				:rules="selectRules"
-				:label="$t('forms.film.producer')"
-				prepend-inner-icon="mdi-account" />
-			<v-select
-				v-model.number="filmForm.writerId"
-				name="writerId"
-				item-value="id"
-				:loading="loading"
-				item-title="name"
-				:items="writers"
-				:rules="selectRules"
-				:label="$t('forms.film.writer')"
-				prepend-inner-icon="mdi-account" />
-			<v-select
-				v-model.number="filmForm.composerId"
-				name="composerId"
-				item-value="id"
-				:loading="loading"
-				item-title="name"
-				:rules="selectRules"
-				:items="composers"
-				:label="$t('forms.film.composer')"
-				prepend-inner-icon="mdi-account" />
-
-			<v-textarea
-				v-if="showDescription"
-				:label="$t('forms.film.description')"
-				name="description"
-				density="compact"
-				prepend-inner-icon="mdi-pencil"
-				v-model="filmForm.description"
-				variant="filled"
-				auto-grow
-				rows="3"
-				no-resize
-				:rules="descriptionRules" />
-		</v-form>
+		<v-card-text>
+			<v-form
+				ref="formRef"
+				@submit.prevent>
+				<v-text-field
+					v-model="filmForm.name"
+					name="name"
+					:rules="nameRules"
+					:label="$t('forms.film.name')"
+					prepend-inner-icon="mdi-movie-play" />
+				<v-text-field
+					v-model="filmForm.slogan"
+					name="slogan"
+					:label="$t('forms.film.slogan')"
+					prepend-inner-icon="mdi-format-quote-close" />
+				<v-combobox
+					v-model.number="filmForm.releaseYear"
+					name="releaseYear"
+					:rules="releaseYearRules"
+					prepend-inner-icon="mdi-calendar"
+					:label="$t('forms.film.release_year')"
+					:items="yearsOfReleaseItems" />
+					<v-select
+					v-model="filmForm.genreIds"
+					name="genreIds"
+					multiple
+					:items="genres"
+					:rules="multipleSelectRules"
+					:label="$t('forms.film.genres')"
+					item-value="value"
+					item-title="name"
+					prepend-inner-icon="mdi-filmstrip" />
+				<v-select
+					v-model.number="filmForm.age"
+					name="age"
+					:rules="ageRules"
+					prepend-inner-icon="mdi-cake-variant"
+					:label="$t('forms.film.age')"
+					:items="ageItems" />
+				<v-text-field
+					v-model="filmForm.duration"
+					:label="$t('forms.film.duration')"
+					type="time"
+					name="duration"
+					prepend-inner-icon="mdi-timer"
+					:rules="durationRules" />
+				<v-select
+					v-model="filmForm.actorIds"
+					:loading="loading"
+					name="actorIds"
+					multiple
+					:items="actors"
+					item-value="id"
+					item-title="name"
+					:rules="multipleSelectRules"
+					:label="$t('forms.film.actors')"
+					prepend-inner-icon="mdi-account" />
+				<v-select
+					v-model.number="filmForm.directorId"
+					name="directorId"
+					:loading="loading"
+					item-value="id"
+					item-title="name"
+					:items="directors"
+					:rules="selectRules"
+					:label="$t('forms.film.director')"
+					prepend-inner-icon="mdi-account" />
+				<v-select
+					v-model.number="filmForm.producerId"
+					name="producerId"
+					item-value="id"
+					:loading="loading"
+					item-title="name"
+					:items="directors"
+					:rules="selectRules"
+					:label="$t('forms.film.producer')"
+					prepend-inner-icon="mdi-account" />
+				<v-select
+					v-model.number="filmForm.writerId"
+					name="writerId"
+					item-value="id"
+					:loading="loading"
+					item-title="name"
+					:items="writers"
+					:rules="selectRules"
+					:label="$t('forms.film.writer')"
+					prepend-inner-icon="mdi-account" />
+				<v-select
+					v-model.number="filmForm.composerId"
+					name="composerId"
+					item-value="id"
+					:loading="loading"
+					item-title="name"
+					:rules="selectRules"
+					:items="composers"
+					:label="$t('forms.film.composer')"
+					prepend-inner-icon="mdi-account" />
+	
+				<v-textarea
+					v-if="showDescription"
+					:label="$t('forms.film.description')"
+					name="description"
+					density="compact"
+					prepend-inner-icon="mdi-pencil"
+					v-model="filmForm.description"
+					variant="filled"
+					auto-grow
+					rows="3"
+					no-resize
+					:rules="descriptionRules" />
+			</v-form>
+		</v-card-text>
 
 		<v-card-actions>
 			<v-spacer></v-spacer>

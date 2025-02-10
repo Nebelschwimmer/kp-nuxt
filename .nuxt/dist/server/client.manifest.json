@@ -1,0 +1,18 @@
+{
+  "@vite/client": {
+    "prefetch": true,
+    "isEntry": true,
+    "file": "@vite/client",
+    "css": [],
+    "module": true,
+    "resourceType": "script"
+  },
+  "/home/nebelschwimmer/Документы/Projects/kp-nuxt/node_modules/.pnpm/nuxt@3.15.4_@parcel+watcher@2.5.1_@types+node@22.13.1_db0@0.2.3_eslint@9.20.0_jiti@2.4._e3babeaa2002b988fded74657d7ccb27/node_modules/nuxt/dist/app/entry.js": {
+    "resourceType": "script",
+    "module": true,
+    "prefetch": true,
+    "preload": true,
+    "isEntry": true,
+    "file": "/home/nebelschwimmer/Документы/Projects/kp-nuxt/node_modules/.pnpm/nuxt@3.15.4_@parcel+watcher@2.5.1_@types+node@22.13.1_db0@0.2.3_eslint@9.20.0_jiti@2.4._e3babeaa2002b988fded74657d7ccb27/node_modules/nuxt/dist/app/entry.js"
+  }
+}

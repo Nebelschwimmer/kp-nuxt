@@ -1,8 +1,8 @@
 export default {
   welcome: "Bienvenue",
-
   general: {
     about: "A propos du projet",
+    see_all:"Voir tout",
     created_at: "Créé",
     updated_at: "Mis à jour",
     published_by: "Publié par",
@@ -300,6 +300,8 @@ export default {
       your_assessment: "Votre avis",
       comment: "Commentaire",
       comments: "Commentaires",
+      last_comments: "Derniers commentaires",
+      no_comments: "Aucun commentaire",
       confirm_assessment: "Confirmer l'avis",
       producer: "Producteur",
       writer: "Auteur",

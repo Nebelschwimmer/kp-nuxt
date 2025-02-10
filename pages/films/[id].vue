@@ -4,9 +4,7 @@
 			<v-navigation-drawer
 				v-if="$vuetify.display.mdAndUp"
 				v-model="showLeftDrawer"
-				drawer
-				width="350"
-				order="2">
+				location="start">
 				<FilmDrawerContent
 					:general-info="generalInfo"
 					:starring="film?.actorsData"
@@ -15,16 +13,20 @@
 			<v-navigation-drawer
 				location="end"
 				order="1">
-				<v-list>
+				<v-list nav>
 					<v-list-item
 						v-for="(link, index) in pageContents"
-						:active="link.value === activeSection"
 						:key="index"
+						:active="link.value === activeSection"
 						:title="link.title"
 						:value="link.value"
 						:prepend-icon="link.icon"
-						@click="scrollOnContentItemClick(link.value)"></v-list-item>
+						@click="scrollOnContentItemClick(link.value)"/>
+					<NotAuthWarning v-if="!isAuthenticated" />
 				</v-list>
+				<ScrollTopBtn
+					:show="showScrollFab"
+					@scroll:top="scrollTop" />
 			</v-navigation-drawer>
 		</client-only>
 		<DetailCard
@@ -33,7 +35,7 @@
 			:display-avatar="false"
 			:cover="film?.cover || ''"
 			:is-auth="isAuthenticated"
-			leftDrawer
+			left-drawer
 			@drawer:toggle="showLeftDrawer = !showLeftDrawer">
 			<template #menu>
 				<FilmDetailMenu
@@ -42,8 +44,8 @@
 					@edit:general="handleGeneralInfoEdit"
 					@edit:description="handleEditDescription"
 					@edit:gallery="openGalleryEditor"
-					@delete:film="handleFilmDelete">
-				</FilmDetailMenu>
+					@delete:film="handleFilmDelete"/>
+				
 			</template>
 			<template #text>
 				<main v-scroll="onScroll">
@@ -55,11 +57,13 @@
 					<v-expansion-panels
 						v-model="rightColumnAccordion"
 						variant="accordion"
+						bg-color="transparent"
 						multiple>
 						<v-expansion-panel
+							id="gallery"
 							:title="$t('pages.films.gallery')"
 							value="gallery"
-							id="gallery"
+							class="content-item"
 							tag="section">
 							<v-expansion-panel-text>
 								<GalleryViewer
@@ -73,10 +77,11 @@
 						</v-expansion-panel>
 
 						<v-expansion-panel
+							id="rating"
 							:title="$t('pages.films.rating')"
 							tag="section"
-							id="rating"
-							value="rating">
+							value="rating"
+							class="content-item">
 							<v-expansion-panel-text>
 								<div class="d-flex flex-column justify-center ga-1">
 									<FilmAssessments
@@ -95,28 +100,27 @@
 							</v-expansion-panel-text>
 						</v-expansion-panel>
 						<v-expansion-panel
+							id="description"
 							:title="$t('pages.films.description')"
 							tag="section"
-							id="description"
+							class="content-item"
 							value="description">
 							<v-expansion-panel-text>
 								<IndentedEditableText
 									:edit-mode="editDescriptionMode"
 									:messages="$t('pages.films.edit_description')"
 									:text="film?.description || ''"
-									id="description"
 									@sumbit:edit="submitDescriptionEdit" />
 							</v-expansion-panel-text>
 						</v-expansion-panel>
 					</v-expansion-panels>
 				</main>
-				<v-divider></v-divider>
 			</template>
 			<template #footer>
 				<v-footer
 					class="d-flex align-center ga-2 text-caption"
 					color="surface-variant">
-					<v-spacer></v-spacer>
+					<v-spacer/>
 					<span>{{ $t("general.published_by") }}</span>
 					<nuxt-link>{{
 						film?.publisherData ? film?.publisherData.name : ""
@@ -131,10 +135,10 @@
 			:text="$t('forms.film.gallery_item_delete_confirm')"
 			:loading="loading"
 			@confirm="handleGalleryItemsDelete"
-			@cancel="showConfirmDialog = false"></ConfirmDialog>
+			@cancel="showConfirmDialog = false"/>
 		<BaseDialog
 			v-model:opened="generalInfoEdit"
-			:max-width="1200"
+			:max-width="800"
 			:title="$t('pages.films.edit') + ' ' + film?.name"
 			:loading="loading"
 			@close="generalInfoEdit = false">
@@ -189,7 +193,6 @@
 
 <script lang="ts" setup>
 	import { useFilmStore } from "~/stores/filmStore";
-	import { storeToRefs } from "pinia";
 	import { useAuthStore } from "~/stores/authStore";
 	import DetailCard from "~/components/Containment/Cards/DetailCard.vue";
 	import BaseDialog from "~/components/Dialogs/BaseDialog.vue";
@@ -202,6 +205,8 @@
 	import FilmAssessments from "~/components/FilmSubComponents/FilmAssessments.vue";
 	import FilmDrawerContent from "~/components/FilmSubComponents/FilmDrawerContent.vue";
 	import FilmDetailMenu from "~/components/FilmSubComponents/FilmDetailMenu.vue";
+	import NotAuthWarning from "~/components/Misc/NotAuthWarning.vue";
+	import ScrollTopBtn from "~/components/Containment/Btns/ScrollTopBtn.vue";
 	const showDeleteWarning = ref(false);
 	const GALLERY_CARD_HEIGHT = 200;
 	const editDescriptionMode = ref(false);
@@ -215,9 +220,10 @@
 	const showAssessDialog = ref(false);
 	const comment = ref("");
 	const rating = ref(0);
-	const activeSection = ref<string|undefined>("gallery");
+	const activeSection = ref<string | undefined>("gallery");
 	const rightColumnAccordion = ref(["gallery", "rating"]);
 	const showLeftDrawer = ref(true);
+	const showScrollFab = ref(false);
 	const { isAuthenticated } = storeToRefs(useAuthStore());
 	const {
 		film,
@@ -247,9 +253,9 @@
 	const activeTab = ref(0);
 	const imagesToDelete = computed(() => {
 		return film.value?.gallery
-			.filter((_, index: number) => selectedImagesIndices.value.includes(index))
+			.filter((_: string, index: number) => selectedImagesIndices.value.includes(index))
 			.map((imageName: string) => {
-				let fileName = imageName ? imageName.split("/").at(-1) : "";
+				const fileName = imageName ? imageName.split("/").at(-1) : "";
 
 				return fileName ? fileName.split(".")[0] : "";
 			});
@@ -348,43 +354,29 @@
 
 	const onScroll = () => {
 		const scrollPosition = window.scrollY;
-		const gallerySectionElement = document.getElementById("gallery");
-		const ratingSectionElement = document.getElementById("rating");
-		const descriptionSectionElement = document.getElementById("description");
-
-		if (gallerySectionElement) {
-			const gallerySectionTop = gallerySectionElement.offsetTop;
-			if (scrollPosition >= gallerySectionTop - 100) {
-				activeSection.value = "gallery";
-
+		const contentItems = document.querySelectorAll(".content-item");
+		contentItems.forEach((element: Element): void => {
+			const htmlElement = element as HTMLElement;
+			const elementTop = htmlElement.offsetTop; 
+			const elementHeight = htmlElement.clientHeight;
+			const elementBottom = elementTop + elementHeight;
+			if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
+				activeSection.value = element.id;
 			}
-		}
+		});
 
-		if (ratingSectionElement) {
-			const ratingSectionTop = ratingSectionElement.offsetTop;
-			if (scrollPosition >= ratingSectionTop - 100) {
-				activeSection.value = "rating";
-
-			}
-		}
-
-		if (descriptionSectionElement) {
-			const descriptionSectionTop = descriptionSectionElement.offsetTop;
-			if (scrollPosition >= descriptionSectionTop - 100) {
-				activeSection.value = "description";
-
-			}
-		}
+		showScrollFab.value = scrollPosition > 100;
 	};
 
 	const scrollOnContentItemClick = (anchor: string) => {
 		const element = document.getElementById(anchor);
 		if (element) {
-			element.scrollIntoView({behavior: "smooth" });
+			element.scrollIntoView({ behavior: "smooth", block: "start" });
 			if (!rightColumnAccordion.value.includes(anchor)) {
-					rightColumnAccordion.value.push(anchor);
-				}
-			activeSection.value = anchor;
+				rightColumnAccordion.value.push(anchor);
+			}
+			const index = rightColumnAccordion.value.indexOf(anchor);
+			activeSection.value = rightColumnAccordion.value[index];
 		}
 	};
 
@@ -476,6 +468,13 @@
 		activeTab.value = 0;
 	};
 
+	const scrollTop = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		});
+	};
+
 	const handleGalleryUpload = async (files: File[]) => {
 		const id = Number(useRoute().params.id);
 		await uploadGallery(files, id);
@@ -503,10 +502,6 @@
 		editDescriptionMode.value = false;
 	};
 
-	const enableAssessing = () => {
-		isAssessing.value = true;
-	};
-
 	watch(
 		locale,
 		async (newVal) => {
@@ -528,4 +523,9 @@
 	});
 </script>
 
-<style></style>
+<style>
+	.content-item {
+		scroll-margin-top: 100px;
+		background-color: rgba(0, 0, 0, 0.031) !important;
+	}
+</style>

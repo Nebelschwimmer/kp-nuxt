@@ -1,6 +1,7 @@
 export default {
   welcome: "Welcome",
   general: {
+    see_all:"See all",
     about: "About project",
     total: "Total",
     published_by: "Published by",
@@ -302,6 +303,8 @@ export default {
       confirm_assessment: "Confirm assessment",
       comment: "Comment",
       comments: "Comments",
+      last_comments: "Last comments",
+      no_comments: "No comments",
       producer: "Producer",
       writer: "Writer",
       age: "Age restriction",

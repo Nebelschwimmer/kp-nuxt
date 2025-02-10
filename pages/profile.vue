@@ -11,70 +11,39 @@
 			:loading="loading"
 			:is-auth="isAuthenticated">
 			<template #menu>
-				<template v-if="$vuetify.display.smAndDown">
-					<v-menu location="bottom end">
-						<template v-slot:activator="{ props }">
-							<v-btn
-								icon
-								v-bind="props">
-								<v-icon>mdi-dots-vertical</v-icon>
-							</v-btn>
-						</template>
-						<v-list
-							density="compact"
-							class="dark-glass">
-							<v-list-item
-								:title="$t('actions.choose_cover')"
-								prepend-icon="mdi-image"
-								value="cover"
-								@click="showCoverChooseDialog = true"></v-list-item>
-							<v-list-item
-								:title="$t('actions.edit_avatar')"
-								prepend-icon="mdi-account"
-								value="avatar"
-								@click="showAvatarUploadDialog = true"></v-list-item>
-							<v-list-item
-								:title="$t('actions.edit')"
-								prepend-icon="mdi-pencil"
-								value="edit"
-								@click="handleEdit"></v-list-item>
-							<v-list-item
-								:title="$t('auth.sign_out')"
-								prepend-icon="mdi-logout"
-								value="logout"
-								@click="showConfirmLogoutDialog = true"></v-list-item>
-						</v-list>
-					</v-menu>
-				</template>
-				<template v-else>
-					<div class="d-flex ga-1">
+				<v-menu location="bottom end">
+					<template v-slot:activator="{ props }">
 						<v-btn
-							variant="tonal"
-							prepend-icon="mdi-image"
-							@click="showCoverChooseDialog = true"
-							>{{ $t("actions.choose_cover") }}</v-btn
+							icon
+							v-bind="props">
+							<v-icon>mdi-dots-vertical</v-icon>
+						</v-btn>
+					</template>
+					<v-list
+						density="compact"
 						>
-						<v-btn
-							variant="tonal"
+						<v-list-item
+							:title="$t('actions.choose_cover')"
+							prepend-icon="mdi-image"
+							value="cover"
+							@click="showCoverChooseDialog = true"></v-list-item>
+						<v-list-item
+							:title="$t('actions.edit_avatar')"
 							prepend-icon="mdi-account"
-							@click="showAvatarUploadDialog = true">
-							{{ $t("actions.edit_avatar") }}
-						</v-btn>
-						<v-btn
-							variant="tonal"
+							value="avatar"
+							@click="showAvatarUploadDialog = true"></v-list-item>
+						<v-list-item
+							:title="$t('actions.edit')"
 							prepend-icon="mdi-pencil"
-							@click="handleEdit">
-							{{ $t("actions.edit") }}
-						</v-btn>
-						<v-btn
-							variant="tonal"
-							base-color="warning"
+							value="edit"
+							@click="handleEdit"></v-list-item>
+						<v-list-item
+							:title="$t('auth.sign_out')"
 							prepend-icon="mdi-logout"
-							@click="showConfirmLogoutDialog = true">
-							{{ $t("auth.sign_out") }}
-						</v-btn>
-					</div>
-				</template>
+							value="logout"
+							@click="showConfirmLogoutDialog = true"></v-list-item>
+					</v-list>
+				</v-menu>
 			</template>
 		</DetailCard>
 
@@ -226,7 +195,7 @@
 					name: t("forms.person.age"),
 					value:
 						locale.value === "ru"
-							? declineYearsInRussian(currentUser.value?.age || 0)
+							? declineInRussian(currentUser.value?.age || 0, ["год", "года", "лет"])
 							: currentUser.value?.age + " " + t("general.years_old") || "",
 					icon: "mdi-cake",
 				},

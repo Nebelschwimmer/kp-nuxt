@@ -8,22 +8,12 @@
 				order="1">
 				<NavDrawerContent />
 			</v-navigation-drawer>
-			<v-navigation-drawer
-				location="start"
-				floating
-				order="1">
-			</v-navigation-drawer>
+			
 			
 		</client-only>
 		<v-app-bar
 			order="0"
-			color="primary"
-			scroll-behavior="fade-image">
-			<template #image>
-				<v-img
-				gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-				></v-img>
-			</template>
+			>
 			<v-app-bar-title>
 				<Logo />
 			</v-app-bar-title>
@@ -56,20 +46,6 @@
 				<slot />
 			</v-container>
 		</v-main>
-		<v-app-bar
-			location="bottom"
-			eleavation="4"
-			order="0">
-			<v-footer class="d-flex flex-column text-subtitle-2 my-4">
-				<span>© Nebelschwimmer, {{ new Date().getFullYear() }}</span>
-				<nuxt-link
-					style="text-decoration: underline"
-					to="/about"
-					>{{ $t("general.about") }}</nuxt-link
-				>
-			</v-footer>
-		</v-app-bar>
-
 		<v-bottom-navigation
 			v-if="$vuetify.display.smAndDown"
 			v-model="activeBottomBtn"

@@ -1,5 +1,4 @@
 <template>
-	<v-card :loading="loading">
 		<ListPage
 			v-if="filmsPresent"
 			:items="filmItems || []"
@@ -19,10 +18,9 @@
 					@update:order="order = $event.value"
 					@update:search="search = $event.value"
 					@update:sort="sortBy = $event.value"
-					@update:search-options="" />
+					/>
 			</template>
 		</ListPage>
-	</v-card>
 </template>
 
 <script lang="ts" setup>
@@ -92,17 +90,6 @@
 	const updateQueryParams = (page: number) => {
 		offset.value = (page - 1) * limit.value;
 	};
-
-	const debounce = (fn: Function, delay: number) => {
-		let timeoutId: number;
-		return (...args: any[]) => {
-			clearTimeout(timeoutId);
-			timeoutId = window.setTimeout(() => {
-				fn(...args);
-			}, delay);
-		};
-	};
-
 	watch(
 		[limit, offset, order, sortBy, locale],
 		async ([newLimit, newOffset, newOrder, newSortBy, newLocale]) => {

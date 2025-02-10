@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 	import LoadingScreen from "./components/Misc/LoadingScreen.vue";
+
 	const isLoading = ref(true);
 	onMounted(async () => {
 		await nextTick(() => {

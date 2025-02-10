@@ -13,7 +13,6 @@
 				:rules="nameRules"
 				:label="$t('forms.person.lastname')"
 				prepend-icon="mdi-account"></v-text-field>
-			{{ personForm }}
 				<v-select
 				v-model="personForm.genderId"
 				name="genderId"

@@ -3,7 +3,7 @@
 		<DetailCard
 			display-avatar
 			:title="person?.firstname + ' ' + person?.lastname"
-			:general-info="computedPersonDetails"
+			:general-info="computedPersonDetails as any"
 			:page-name="$t('pages.persons.details')"
 			:avatar="person?.avatar || ''"
 			:cover="person?.cover || ''"
@@ -12,7 +12,7 @@
 			:loading="loading">
 			<template #menu>
 				<v-menu location="bottom end">
-					<template v-slot:activator="{ props }">
+					<template #activator="{ props }">
 						<v-btn
 							icon
 							:disabled="!currentUser"
@@ -25,20 +25,20 @@
 							:title="$t('actions.choose_cover')"
 							prepend-icon="mdi-image"
 							value="cover"
-							@click="chooseCover"></v-list-item>
+							@click="chooseCover"/>
 						<v-list-item
 							:title="$t('actions.edit_avatar')"
 							prepend-icon="mdi-account"
 							value="avatar"
-							@click="chooseAvatar"></v-list-item>
+							@click="chooseAvatar"/>
 						<v-list-item
 							:title="$t('actions.edit')"
 							prepend-icon="mdi-pencil"
 							value="edit">
-							<template v-slot:append>
+							<template #append>
 								<v-icon
 									icon="mdi-menu-right"
-									size="x-small"></v-icon>
+									size="x-small"/>
 							</template>
 							<v-menu
 								activator="parent"
@@ -49,17 +49,17 @@
 										:title="$t('pages.general_info')"
 										prepend-icon="mdi-information"
 										value="info"
-										@click="generalInfoEdit = true"></v-list-item>
+										@click="generalInfoEdit = true"/>
 									<v-list-item
 										:title="$t('pages.detailed_info')"
 										prepend-icon="mdi-details"
 										value="details"
-										@click="bioEditMode = true"></v-list-item>
+										@click="handleBioEdit"/>
 									<v-list-item
 										:title="$t('pages.gallery')"
 										prepend-icon="mdi-view-gallery"
 										value="gallery"
-										@click="photoEditMode = true"></v-list-item>
+										@click="photoEditMode = true"/>
 								</v-list>
 							</v-menu>
 						</v-list-item>
@@ -68,7 +68,7 @@
 							prepend-icon="mdi-delete"
 							value="remove"
 							base-color="error"
-							@click="showDeleteWarning = true"></v-list-item>
+							@click="showDeleteWarning = true"/>
 					</v-list>
 				</v-menu>
 			</template>
@@ -100,8 +100,8 @@
 					</v-expansion-panel>
 
 					<v-expansion-panel
-						:title="$t('pages.persons.photos')"
 						id="gallery"
+						:title="$t('pages.persons.photos')"
 						class=""
 						value="gallery">
 						<v-expansion-panel-text>
@@ -124,7 +124,7 @@
 								:title="$t('pages.persons.featuredInFilms')"
 								prepend-icon="mdi-format-list-bulleted"
 								variant="elevated">
-								<v-divider></v-divider>
+								<v-divider/>
 								<v-table>
 									<thead>
 										<tr>
@@ -140,7 +140,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="film in person?.actedInFilms">
+										<tr v-for="film in person?.actedInFilms" :key="film.id">
 											<td>{{ film.releaseYear || $t("general.no_data") }}</td>
 											<td>
 												<nuxt-link
@@ -163,8 +163,8 @@
 								:title="$t('empty_states.filmography')"
 								icon="mdi-note-off"
 								:action-text="$t('empty_states.actions.to_films')"
-								@click:action="navigateTo('/films')">
-							</v-empty-state>
+								@click:action="navigateTo('/films')"/>
+						
 						</v-expansion-panel-text>
 					</v-expansion-panel>
 				</v-expansion-panels>
@@ -220,7 +220,7 @@
 			type="error"
 			:text="$t('forms.film.gallery_item_delete_confirm')"
 			:loading="loading"
-			@confirm="handlePhotosDelete"></ConfirmDialog>
+			@confirm="handlePhotosDelete"/>
 		<ConfirmDialog
 			v-model="showCoverReplacementWarning"
 			:text="$t('general.file_replacement_warning')"
@@ -238,7 +238,6 @@
 	import DetailCard from "~/components/Containment/Cards/DetailCard.vue";
 	import BaseDialog from "~/components/Dialogs/BaseDialog.vue";
 	import { usePersonStore } from "~/stores/personStore";
-	import { storeToRefs } from "pinia";
 	import PersonForm from "~/components/Forms/PersonForm.vue";
 	import IndentedEditableText from "~/components/Misc/IndentedEditableText.vue";
 	import GalleryViewer from "~/components/Gallery/GalleryViewer.vue";
@@ -297,9 +296,7 @@
 		return t("pages.films.edit_gallery") + " " + personFullName.value;
 	});
 	const computedPersonDetails = computed(() => {
-		return {
-			subheader: t("pages.general_info"),
-			list: [
+		return [
 				{
 					name: t("forms.person.gender"),
 					value: person.value?.gender || "",
@@ -309,13 +306,12 @@
 					name: t("forms.person.birthday"),
 					value:
 						locale.value === "ru"
-							? `${declineYearsInRussian(person.value?.age || 0)}`
+							? `${declineInRussian(person.value?.age || 0, ["год", "года", "лет"])}`
 							: `${person.value?.age}`,
 					icon: "mdi-calendar",
 				},
-			],
-		};
-	}) as ComputedRef<DetailList>;
+			]
+	})
 
 	const sliderGalleryArr = computed(() => {
 		const initialArr = Array.from({ length: GALLERY_SIZE }, (_, i) => i);

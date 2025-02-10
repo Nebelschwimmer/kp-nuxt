@@ -40,44 +40,41 @@ export default defineNuxtConfig({
 	},
 	vuetify: {
 		vuetifyOptions: {
-			labComponents: true,
-			defaults: {
-				VTextField: {
-					variant: "filled",
+		  labComponents: true,
+		  defaults: {
+			VTextField: { variant: "filled" },
+			VSelect: { variant: "filled" },
+			VCombobox: { variant: "filled" },
+			VNavigationDrawer: { color: "transparent" },
+			VExpansionPanels: { "bg-color": "transparent" },
+		  },
+		  theme: {
+			themes: {
+			  light: {
+				dark: false,
+				colors: {
+				  background: "#F5F7FA",
+				  surface: "#FFFFFF",
+				  primary: "#007AFF",
+				  secondary: "#34C759",
+				  accent: "#FF3B30",
 				},
-				VSelect: {
-					variant: "filled",
+			  },
+			  dark: {
+				dark: true,
+				colors: {
+				  background: "#121212",
+				  surface: "#1E1E1E",
+				  primary: "#0A84FF",
+				  secondary: "#30D158",
+				  accent: "#FF453A",
 				},
-				VCombobox: {
-					variant: "filled",
-				},
+			  },
 			},
-			theme: {
-				// themes: {
-				// 	light: {
-				// 		dark: false,
-				// 		colors: {
-				// 			background: '#ffffff',
-				// 			surface: 'rgb(235, 235, 235)',
-				// 			primary: 'rgb(159, 58, 181)',
-				// 			secondary: '#05c19c',
-				// 			accent: '#ff00e9',
-				// 		}
-				// 	},
-				// 	dark: {
-				// 		dark: true,
-				// 		colors: {
-				// 			background: '#3b3b3b',
-				// 			surface: 'rgb(28, 27, 33)',
-				// 			primary: 'rgb(159, 58, 181)',
-				// 			secondary: '#05c19c',
-				// 			accent: '#ff00e9',
-				// 		}
-				// 	}
-				// }
-			}
+		  },
 		},
-	},
+	  },
+	  
 	imports: {
 		dirs: ["types/*.ts", "store/*.ts", "types/**/*.ts"],
 	},
@@ -104,42 +101,43 @@ export default defineNuxtConfig({
 	},
 
 	vite: {
+		logLevel: "info",
+		optimizeDeps: {
+			include: ["@yeger/vue-masonry-wall"],
+		},
 		build: {
 			sourcemap: true,
 		},
 		css: {
 			preprocessorOptions: {
 				scss: {
-					api: 'modern-compiler' // or "modern"
-				}
-			}
+					api: "modern-compiler", // or "modern"
+				},
+			},
 		},
 		server: {
 			hmr: {
 				timeout: 30000,
-				overlay: true, 
+				overlay: true,
 			},
 			proxy: {
 				"/api": {
 					target: process.env.API_BASE_URL,
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/api/, ""),
+					secure: false
 				},
 				"/uploads": {
 					target: `${process.env.BASE_URL}/uploads`,
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/uploads/, ""),
+					secure: false
 				},
 			},
 		},
 	},
-	eslint: {
-		config: {
-			stylistic: {
-				indent: "tab",
-				semi: true,
-			}, // <---
-		},
+	typescript: {
+		// typeCheck: true
 	},
 
 	compatibilityDate: "2024-04-03",

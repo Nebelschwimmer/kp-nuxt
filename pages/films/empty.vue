@@ -3,8 +3,8 @@
 		:title="$t('empty_states.films')"
 		icon="mdi-filmstrip-off"
 		:action-text="$t('empty_states.actions.add')"
-		@click:action="navigateTo('/films/new')">
-	</v-empty-state>
+		@click:action="navigateTo('/films/new')"/>
+
 </template>
 
 <script lang="ts" setup>
